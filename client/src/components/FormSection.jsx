@@ -6,6 +6,13 @@ function FormSection() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [deliverDate, setDeliverDate] = useState(''); // NEW STATE
+
+  const handleIntervalClick = (monthsToAdd) => {
+    const today = new Date();
+    today.setMonth(today.getMonth() + monthsToAdd);
+    setDeliverDate(today.toISOString().split('T')[0]); // format as YYYY-MM-DD
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,17 +20,15 @@ function FormSection() {
     const formData = {
       message: e.target.message.value,
       email: e.target.email.value,
-      deliverDate: e.target.deliverDate.value,
+      deliverDate: deliverDate || e.target.deliverDate.value, // use state if set
     };
 
-    // Email Validation
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(formData.email)) {
       setError('Please enter a valid email address.');
       return;
     }
 
-    // Date Validation (ensure it's in the future)
     const selectedDate = new Date(formData.deliverDate);
     const today = new Date();
     if (selectedDate < today) {
@@ -46,9 +51,8 @@ function FormSection() {
       const result = await response.json();
 
       if (result.success) {
-        // Handle success (e.g., show success message or navigate)
         alert('Message sent successfully!');
-        navigate('/success'); // Assuming you have a success page
+        navigate('/success');
       } else {
         setError('Failed to send your message. Please try again.');
       }
@@ -62,36 +66,44 @@ function FormSection() {
 
   return (
     <form className="form-container" onSubmit={handleSubmit}>
-      {/* Left side: Message Box */}
       <div className="message-box">
         <label>Words to your future self...</label>
         <p>
           The present is but a fleeting moment, slipping like sand through
-          your fingers. Write the words you wish your future self would
-          remember when today is but a distant whisper.
+          your fingers...
         </p>
         <textarea
           name="message"
           className="message-textarea"
-          placeholder="As I write these words, I wonder who I'll be when I read them again..."
+          placeholder="As I write these words..."
           required
         />
       </div>
 
-      {/* Right side: Date, Email, and Send Message */}
       <div className="reunion-details">
         <label>The reunion details...</label>
         <p>
-          Choose when these words will find you again, like an old letter
-          lost in time, waiting to be rediscovered.
+          Choose when these words will find you again...
         </p>
 
         <div className="form-field">
           <label>When should these words find you again?</label>
+
+          {/* ✅ Quick Interval Buttons */}
+          <div className="quick-buttons">
+            <button type="button" onClick={() => handleIntervalClick(1)}>+1 Month</button>
+            <button type="button" onClick={() => handleIntervalClick(6)}>+6 Months</button>
+            <button type="button" onClick={() => handleIntervalClick(12)}>+1 Year</button>
+            <button type="button" onClick={() => handleIntervalClick(60)}>+5 Years</button>
+          </div>
+
+          {/* Controlled date input */}
           <input
             type="date"
             name="deliverDate"
             className="form-input"
+            value={deliverDate}
+            onChange={(e) => setDeliverDate(e.target.value)}
             required
           />
         </div>
@@ -107,10 +119,8 @@ function FormSection() {
           />
         </div>
 
-        {/* Error Message */}
         {error && <div className="error-message">{error}</div>}
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={isLoading}
