@@ -1,3 +1,4 @@
+require('./fix-path-to-regexp');
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -29,9 +30,9 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(clientBuildPath));
 
   // Handle React routing, return all requests to React app
-  app.get('*', (req, res, next) => {
-    // Skip API routes
-    if (req.originalUrl.startsWith('/api')) {
+  app.use('/*', (req, res, next) => {
+    // Skip API routes and non-GET requests
+    if (req.originalUrl.startsWith('/api') || req.method !== 'GET') {
       return next();
     }
     res.sendFile(path.join(clientBuildPath, 'index.html'));
