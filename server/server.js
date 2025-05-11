@@ -25,26 +25,22 @@ app.use((req, res, next) => {
   next();
 });
 
-// API routes
+// API routes setup
 app.use('/api/messages', messagesRouter);
 
-// Static files and client routing
+// Static files and client routing in production
 if (process.env.NODE_ENV === 'production') {
   const clientBuildPath = path.join(__dirname, '../client/dist');
   
   // Serve static files
   app.use(express.static(clientBuildPath));
   
-  // Handle API routes first
-  app.use('/api', messagesRouter);
-  
-  // Then handle client-side routes
+  // Handle client-side routes
   app.get('/*', (req, res) => {
-    res.sendFile(path.join(clientBuildPath, 'index.html'));
+    if (!req.path.startsWith('/api')) {
+      res.sendFile(path.join(clientBuildPath, 'index.html'));
+    }
   });
-} else {
-  // Development - only use API routes
-  app.use('/api', messagesRouter);
 }
 
 // MongoDB Connection
