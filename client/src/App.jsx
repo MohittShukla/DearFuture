@@ -8,7 +8,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/success" element={<Success />} />
-        {/* Add more routes like /about if needed */}
+     
       </Routes>
     </BrowserRouter>
   );
