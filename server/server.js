@@ -1,4 +1,3 @@
-require('./fix-path-to-regexp');
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -8,6 +7,28 @@ const messagesRouter = require('./routes/messages');
 require('./scheduler/sendEmails'); // Start the email scheduler
 
 const app = express();
+
+try {
+  const pathToRegexp = require('path-to-regexp');
+  if (pathToRegexp && typeof pathToRegexp.pathToRegexp === 'function') {
+    const originalFn = pathToRegexp.pathToRegexp;
+    pathToRegexp.pathToRegexp = function(path, keys, options) {
+      if (typeof path === 'string' && (path.startsWith('http://') || path.startsWith('https://'))) {
+        try {
+          const url = new URL(path);
+          path = url.pathname;
+          console.log(`Converting URL to pathname: ${url.pathname}`);
+        } catch (e) {
+          // Not a valid URL, continue with original path
+        }
+      }
+      return originalFn(path, keys, options);
+    };
+    console.log('Path-to-regexp patched successfully');
+  }
+} catch (error) {
+  console.warn('Failed to patch path-to-regexp:', error.message);
+}
 
 // Middleware
 app.use(cors({
@@ -30,7 +51,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(clientBuildPath));
 
   // Handle React routing, return all requests to React app
-  app.use('/*', (req, res, next) => {
+  app.use((req, res, next) => {
     // Skip API routes and non-GET requests
     if (req.originalUrl.startsWith('/api') || req.method !== 'GET') {
       return next();
@@ -38,7 +59,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(clientBuildPath, 'index.html'));
   });
 }
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err.message);
