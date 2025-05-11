@@ -10,7 +10,9 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173',
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.CLIENT_URL || 'https://dearfuture.onrender.com'
+    : 'http://localhost:5173',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -23,8 +25,27 @@ app.use((req, res, next) => {
   next();
 });
 
-// Use messages router
+// API routes
 app.use('/api/messages', messagesRouter);
+
+// Static files and client routing
+if (process.env.NODE_ENV === 'production') {
+  const clientBuildPath = path.join(__dirname, '../client/dist');
+  
+  // Serve static files
+  app.use(express.static(clientBuildPath));
+  
+  // Handle API routes first
+  app.use('/api', messagesRouter);
+  
+  // Then handle client-side routes
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(clientBuildPath, 'index.html'));
+  });
+} else {
+  // Development - only use API routes
+  app.use('/api', messagesRouter);
+}
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -33,14 +54,6 @@ mongoose.connect(process.env.MONGO_URI)
     console.error('MongoDB connection error:', err);
     process.exit(1);
   });
-
-// Static files for production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/dist')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
-  });
-}
 
 // Error handling middleware
 app.use((err, req, res, next) => {
