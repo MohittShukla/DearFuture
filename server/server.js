@@ -19,29 +19,30 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Request logger
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`);
-  next();
-});
-
-// API routes setup
+// API routes
 app.use('/api/messages', messagesRouter);
 
-// Static files and client routing in production
+// Serve static files and handle client routing in production
 if (process.env.NODE_ENV === 'production') {
+  // Serve static files from the React app
   const clientBuildPath = path.join(__dirname, '../client/dist');
-  
-  // Serve static files
   app.use(express.static(clientBuildPath));
-  
-  // Handle client-side routes
-  app.get('/*', (req, res) => {
-    if (!req.path.startsWith('/api')) {
-      res.sendFile(path.join(clientBuildPath, 'index.html'));
+
+  // Handle React routing, return all requests to React app
+  app.get('*', (req, res, next) => {
+    // Skip API routes
+    if (req.originalUrl.startsWith('/api')) {
+      return next();
     }
+    res.sendFile(path.join(clientBuildPath, 'index.html'));
   });
 }
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err.message);
+  res.status(500).json({ success: false, message: 'Internal server error' });
+});
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -51,19 +52,7 @@ mongoose.connect(process.env.MONGO_URI)
     process.exit(1);
   });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ success: false, message: 'Something broke!' });
-});
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ success: false, message: 'Route not found' });
-});
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  
 });
