@@ -99,10 +99,7 @@ const formatMessageHTML = (message, scheduledDate) => `
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 30px; border-top: 2px solid #edf2f7;">
           <tr>
             <td align="center" style="padding-top: 30px;">
-              <p class="quote-text">"The past is but a dream, and the future merely a vision."</p>
-              <p style="color: #4299e1; font-style: italic; margin: 0 0 10px 0;">Delivered with care by DearFuture</p>
-              <p style="color: #718096; margin: 0 0 20px 0;">Want to send another message to your future self?</p>
-              <a href="https://dearfuture.com" class="button">Write a New Letter</a>
+              <p style="color: #4299e1; font-style: italic; margin: 0 0 10px 0;">Delivered with care by DearFuture ✨</p>
             </td>
           </tr>
         </table>
