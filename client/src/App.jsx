@@ -6,7 +6,6 @@ import Success from './pages/Success';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
-import './styles/theme.css';
 
 // Protected Route wrapper
 function ProtectedRoute({ children }) {
