@@ -3,14 +3,21 @@ set -e
 
 echo "Building DearFuture application..."
 
-# Set environment variable to disable Rollup native bindings
-export ROLLUP_NATIVE=false
-
 # Build client
 echo "==> Building client..."
 cd client
+
+# Aggressively remove any cached installations
+echo "Cleaning all caches..."
 rm -rf node_modules package-lock.json
-npm install
+npm cache clean --force
+
+# Fresh install without optional dependencies
+echo "Installing dependencies..."
+npm install --no-optional --legacy-peer-deps
+
+# Build the app
+echo "Building..."
 npm run build
 
 # Install server dependencies
