@@ -4,10 +4,11 @@ services:
     env: node
     region: oregon
     buildCommand: >
+      export NODE_VERSION=18 &&
       cd client && 
       rm -rf node_modules package-lock.json && 
-      npm install && 
-      npm run build &&
+      npm install --force && 
+      ROLLUP_NATIVE=0 npm run build &&
       cd ../server && 
       rm -rf node_modules package-lock.json && 
       npm install
@@ -27,3 +28,5 @@ services:
         sync: false
       - key: PORT
         value: 3000
+      - key: NODE_VERSION
+        value: 18

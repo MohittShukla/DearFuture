@@ -9,24 +9,28 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '/api')
       }
     }
   },
   build: {
+    commonjsOptions: {
+      include: [],
+    },
     outDir: 'dist',
     sourcemap: false,
     rollupOptions: {
+      external: ['@rollup/rollup-linux-x64-gnu'],
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
         },
       },
     },
-    target: 'esnext',
+    target: 'es2015',
     minify: 'esbuild',
   },
   optimizeDeps: {
+    disabled: false,
     exclude: ['@rollup/rollup-linux-x64-gnu']
   }
 })
