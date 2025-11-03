@@ -8,7 +8,7 @@
 },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "ROLLUP_NATIVE=0 vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "tailwind": "tailwindcss init -p"
