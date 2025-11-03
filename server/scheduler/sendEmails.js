@@ -254,10 +254,18 @@ const processMessage = async (messageObj, retryCount = 0) => {
     }
 
     console.log(`Sent delivery confirmation to ${email}`);
-    
-    // Only delete if both emails were sent successfully
-    await Message.deleteOne({ _id: messageObj._id });
-    console.log(`Successfully processed and deleted message ${messageObj._id}`);
+
+    // Mark message as delivered instead of deleting it
+    await Message.updateOne(
+      { _id: messageObj._id },
+      {
+        $set: {
+          delivered: true,
+          deliveredAt: new Date()
+        }
+      }
+    );
+    console.log(`Successfully processed and marked message ${messageObj._id} as delivered`);
 
   } catch (error) {
     console.error(`Error processing message ${messageObj._id}:`, error);
@@ -278,15 +286,21 @@ const checkAndSendMessages = async () => {
   const lockKey = 'emailSchedulerLock';
   try {
     console.log(`[Scheduler] Starting check at ${new Date().toISOString()}`);
-    
-    const messagesToSend = await Message.find({});
-    console.log(`[Scheduler] Found ${messagesToSend.length} total messages`);
-    
+
+    // Only fetch messages that haven't been delivered yet
+    const messagesToSend = await Message.find({
+      $or: [
+        { delivered: false },
+        { delivered: { $exists: false } }
+      ]
+    });
+    console.log(`[Scheduler] Found ${messagesToSend.length} undelivered messages`);
+
     const todayStr = normalizeDate(new Date());
-    const dueMessages = messagesToSend.filter(msg => 
+    const dueMessages = messagesToSend.filter(msg =>
       normalizeDate(msg.deliveryDate) === todayStr
     );
-    
+
     console.log(`[Scheduler] Processing ${dueMessages.length} messages due for delivery`);
 
     // Process messages concurrently but with rate limiting

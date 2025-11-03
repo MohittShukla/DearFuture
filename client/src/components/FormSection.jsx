@@ -1,12 +1,22 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 import '../styles/FormSection.css'; // Importing the custom CSS
 
 function FormSection() {
   const navigate = useNavigate();
+  const { user, token, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [deliverDate, setDeliverDate] = useState(''); // NEW STATE
+  const [email, setEmail] = useState('');
+
+  // Pre-fill email if user is authenticated
+  useEffect(() => {
+    if (isAuthenticated && user?.email) {
+      setEmail(user.email);
+    }
+  }, [isAuthenticated, user]);
 
   const handleIntervalClick = (monthsToAdd) => {
     const today = new Date();
@@ -19,7 +29,7 @@ function FormSection() {
 
     const formData = {
       message: e.target.message.value,
-      email: e.target.email.value,
+      email: email || e.target.email.value,
       deliverDate: deliverDate || e.target.deliverDate.value, // use state if set
     };
 
@@ -40,11 +50,19 @@ function FormSection() {
     setError('');
 
     try {
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+
+      // Add authorization header if user is authenticated
+      if (isAuthenticated && token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch('/api/messages', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
 
@@ -115,8 +133,17 @@ function FormSection() {
             name="email"
             className="form-input"
             placeholder="your.email@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            readOnly={isAuthenticated}
+            style={isAuthenticated ? { backgroundColor: '#f7fafc', cursor: 'not-allowed' } : {}}
             required
           />
+          {isAuthenticated && (
+            <small style={{ color: '#718096', fontSize: '0.85rem', marginTop: '0.25rem', display: 'block' }}>
+              Using your account email
+            </small>
+          )}
         </div>
 
         {error && <div className="error-message">{error}</div>}

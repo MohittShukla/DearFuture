@@ -1,6 +1,7 @@
 const express = require('express');
 const Message = require('../models/Message');
 const sendMail = require('../utils/sendMail');
+const { protect, optionalAuth } = require('../middleware/auth');
 
 // HTML template for scheduling confirmation
 const formatSchedulingConfirmationHTML = (deliveryDate) => `
@@ -76,7 +77,7 @@ const formatSchedulingConfirmationHTML = (deliveryDate) => `
 
 const messagesRouter = express.Router();
 
-// GET: Retrieve all messages
+// GET: Retrieve all messages (admin only - for backward compatibility)
 messagesRouter.get('/', async (req, res) => {
   try {
     console.log('GET /api/messages route hit');
@@ -89,22 +90,54 @@ messagesRouter.get('/', async (req, res) => {
   }
 });
 
-// POST: Save a new message
-messagesRouter.post('/', async (req, res) => {
+// GET: Retrieve user's own messages (protected route)
+messagesRouter.get('/my-messages', protect, async (req, res) => {
+  try {
+    console.log('GET /api/messages/my-messages route hit for user:', req.user.id);
+
+    // Find all messages for the authenticated user, sorted by delivery date
+    const messages = await Message.find({ userId: req.user.id })
+      .sort({ deliveryDate: 1 }); // Sort by delivery date ascending
+
+    console.log('User messages retrieved:', messages.length);
+
+    res.json({
+      success: true,
+      data: messages,
+      count: messages.length
+    });
+  } catch (err) {
+    console.error('Error retrieving user messages:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Error retrieving your messages'
+    });
+  }
+});
+
+// POST: Save a new message (supports both authenticated and non-authenticated users)
+messagesRouter.post('/', optionalAuth, async (req, res) => {
   try {
     console.log('\n[POST /api/messages]');
     console.log('Request body:', JSON.stringify(req.body, null, 2));
+    console.log('Authenticated user:', req.user ? req.user.email : 'None (guest)');
+
     const { message, email, deliverDate } = req.body;
+
+    // Use authenticated user's email if available, otherwise use provided email
+    const recipientEmail = req.user ? req.user.email : email;
 
     console.log('Creating new message with data:', {
       message: message.substring(0, 50) + '...',
-      email,
-      deliverDate
+      email: recipientEmail,
+      deliverDate,
+      userId: req.user ? req.user.id : null
     });
 
     const newMessage = new Message({
+      userId: req.user ? req.user.id : null,
       message,
-      email,
+      email: recipientEmail,
       deliveryDate: new Date(deliverDate),
       createdAt: new Date()
     });
@@ -115,11 +148,11 @@ messagesRouter.post('/', async (req, res) => {
     // Send HTML confirmation email with extra logging
     try {
       console.log('\n[Sending confirmation email]');
-      console.log('Recipient:', email);
+      console.log('Recipient:', recipientEmail);
       console.log('Delivery date:', new Date(deliverDate).toLocaleDateString());
-      
+
       const emailResult = await sendMail(
-        email,
+        recipientEmail,
         'Message Scheduled - DearFuture',
         'Your message has been scheduled and will be delivered on ' + new Date(deliverDate).toLocaleDateString(),
         formatSchedulingConfirmationHTML(deliverDate)

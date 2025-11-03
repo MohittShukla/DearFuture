@@ -3,7 +3,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const messagesRouter = require('./routes/messages');
+const authRouter = require('./routes/auth');
 require('./scheduler/sendEmails'); // Start the email scheduler
 
 const app = express();
@@ -32,7 +34,7 @@ try {
 
 // Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
+  origin: process.env.NODE_ENV === 'production'
     ? process.env.CLIENT_URL || 'https://dearfuture.onrender.com'
     : 'http://localhost:5173',
   credentials: true,
@@ -40,8 +42,58 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
+app.use(cookieParser());
+
+// Health check endpoint (for monitoring and keeping server alive)
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Server is running',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
+// Cron trigger endpoint (to be called by external cron service)
+app.post('/api/cron/send-emails', async (req, res) => {
+  try {
+    // Optional: Add a secret key for security
+    const cronSecret = process.env.CRON_SECRET;
+    const providedSecret = req.headers['x-cron-secret'] || req.query.secret;
+
+    if (cronSecret && providedSecret !== cronSecret) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized: Invalid cron secret'
+      });
+    }
+
+    console.log('[Cron Trigger] Manual email check triggered at', new Date().toISOString());
+
+    // Import and run the email scheduler
+    const { checkAndSendMessages } = require('./scheduler/sendEmails');
+
+    // Run in background and return immediately
+    checkAndSendMessages().catch(err => {
+      console.error('[Cron Trigger] Error:', err);
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Email check triggered successfully',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('[Cron Trigger] Error triggering email check:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to trigger email check'
+    });
+  }
+});
 
 // API routes
+app.use('/api/auth', authRouter);
 app.use('/api/messages', messagesRouter);
 
 // Serve static files and handle client routing in production
