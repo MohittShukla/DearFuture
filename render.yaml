@@ -3,7 +3,14 @@ services:
     name: dearfuture
     env: node
     region: oregon
-    buildCommand: cd client && npm install && npm run build && cd ../server && npm install
+    buildCommand: >
+      cd client && 
+      rm -rf node_modules package-lock.json && 
+      npm install && 
+      npm run build &&
+      cd ../server && 
+      rm -rf node_modules package-lock.json && 
+      npm install
     startCommand: cd server && node server.js
     envVars:
       - key: NODE_ENV
