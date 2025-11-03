@@ -2,15 +2,8 @@ services:
   - type: web
     name: dearfuture
     region: oregon
-    buildCommand: >
-      export ROLLUP_NATIVE=0 &&
-      cd client &&
-      rm -rf node_modules package-lock.json &&
-      npm install --force &&
-      npm run build &&
-      cd ../server &&
-      rm -rf node_modules package-lock.json &&
-      npm install
+    env: node
+    buildCommand: cd client && rm -rf node_modules package-lock.json && npm install --legacy-peer-deps --no-optional && npm run build && cd ../server && npm install --legacy-peer-deps
     startCommand: cd server && node server.js
     envVars:
       - key: NODE_ENV
@@ -28,6 +21,4 @@ services:
       - key: PORT
         value: 3000
       - key: NODE_VERSION
-        value: 20
-      - key: ROLLUP_NATIVE
-        value: 0
+        value: 20.11.1
