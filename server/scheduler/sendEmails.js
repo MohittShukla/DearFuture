@@ -2,7 +2,7 @@ const cron = require('cron');
 const sendMail = require('../utils/sendMail');
 const Message = require('../models/Message');
 
-// Function to normalize date to YYYY-MM-DD format in local timezone
+// Normalize date to YYYY-MM-DD format in local timezone
 const normalizeDate = (date) => {
   const d = new Date(date);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -217,74 +217,105 @@ const formatConfirmationHTML = (deliveryDate) => `
 </body>
 </html>`;
 
-// Function to check and send due messages
-const checkAndSendMessages = async () => {
+// Enhanced message processing with retries
+const processMessage = async (messageObj, retryCount = 0) => {
+  const maxRetries = 3;
+  const retryDelay = 5000; // 5 seconds
+
   try {
-    const today = new Date();
-    console.log(`[Scheduler] Checking messages at ${today.toLocaleString()}`);
+    const { email, message, deliveryDate } = messageObj;
+    console.log(`Processing message ${messageObj._id} for ${email}`);
+
+    // Send the actual message
+    const result = await sendMail(
+      email,
+      'Your Message from the Past - DearFuture',
+      message,
+      formatMessageHTML(message, messageObj.createdAt)
+    );
+
+    if (!result.success) {
+      throw new Error(result.error.message);
+    }
+
+    console.log(`Successfully sent message to ${email}`);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Send delivery confirmation
+    const confirmationResult = await sendMail(
+      email,
+      'Message Delivered Successfully - DearFuture',
+      null,
+      formatConfirmationHTML(deliveryDate)
+    );
+
+    if (!confirmationResult.success) {
+      throw new Error('Confirmation email failed: ' + confirmationResult.error.message);
+    }
+
+    console.log(`Sent delivery confirmation to ${email}`);
     
-    // Find all messages
+    // Only delete if both emails were sent successfully
+    await Message.deleteOne({ _id: messageObj._id });
+    console.log(`Successfully processed and deleted message ${messageObj._id}`);
+
+  } catch (error) {
+    console.error(`Error processing message ${messageObj._id}:`, error);
+
+    if (retryCount < maxRetries) {
+      console.log(`Retrying message ${messageObj._id} (Attempt ${retryCount + 1}/${maxRetries})`);
+      await new Promise(resolve => setTimeout(resolve, retryDelay));
+      return processMessage(messageObj, retryCount + 1);
+    } else {
+      console.error(`Failed to process message ${messageObj._id} after ${maxRetries} attempts`);
+      // Could implement a failed messages queue here
+    }
+  }
+};
+
+// Enhanced checkAndSendMessages function
+const checkAndSendMessages = async () => {
+  const lockKey = 'emailSchedulerLock';
+  try {
+    console.log(`[Scheduler] Starting check at ${new Date().toISOString()}`);
+    
     const messagesToSend = await Message.find({});
-    console.log(`[Scheduler] All messages in database:`, messagesToSend);
+    console.log(`[Scheduler] Found ${messagesToSend.length} total messages`);
     
-    const todayStr = normalizeDate(today);
-    console.log(`[Scheduler] Looking for messages due on ${todayStr}`);
+    const todayStr = normalizeDate(new Date());
+    const dueMessages = messagesToSend.filter(msg => 
+      normalizeDate(msg.deliveryDate) === todayStr
+    );
     
-    const dueMessages = messagesToSend.filter(msg => {
-      const msgDate = normalizeDate(msg.deliveryDate);
-      console.log(`[Scheduler] Message ${msg._id}: comparing date ${msgDate} with today ${todayStr}`);
-      return msgDate === todayStr;
-    });
-    
-    console.log(`[Scheduler] Found ${dueMessages.length} messages due for delivery`);
+    console.log(`[Scheduler] Processing ${dueMessages.length} messages due for delivery`);
 
-    for (const messageObj of dueMessages) {
-      try {
-        const { email, message, deliveryDate } = messageObj;
-        console.log(`[Scheduler] Processing message for ${email}`);
-
-        // Send the actual message
-        await sendMail(
-          email,
-          'Your Message from the Past - DearFuture',
-          message,
-          formatMessageHTML(message, messageObj.createdAt)
-        );
-
-        console.log(`[Scheduler] Successfully sent message to ${email}`);
-
-        // Wait 1 second before sending confirmation
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Send delivery confirmation
-        await sendMail(
-          email,
-          'Message Delivered Successfully - DearFuture',
-          null,
-          formatConfirmationHTML(deliveryDate)
-        );
-
-        console.log(`[Scheduler] Sent delivery confirmation to ${email}`);
-
-        // Delete the message after successful sending
-        await Message.deleteOne({ _id: messageObj._id });
-        console.log(`[Scheduler] Deleted message ${messageObj._id}`);
-
-      } catch (error) {
-        console.error(`[Scheduler] Error processing message for ${messageObj.email}:`, error);
+    // Process messages concurrently but with rate limiting
+    const concurrencyLimit = 3;
+    for (let i = 0; i < dueMessages.length; i += concurrencyLimit) {
+      const batch = dueMessages.slice(i, i + concurrencyLimit);
+      await Promise.all(batch.map(msg => processMessage(msg)));
+      
+      // Add delay between batches to prevent rate limiting
+      if (i + concurrencyLimit < dueMessages.length) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
       }
     }
+
   } catch (error) {
     console.error('[Scheduler] Error in scheduler:', error);
   }
 };
 
 // Run check immediately when server starts
-console.log('[Scheduler] Running immediate check for messages...');
+console.log('[Scheduler] Initializing email scheduler...');
 checkAndSendMessages();
 
-// Then set up regular midnight check
-const job = new cron.CronJob('0 0 * * *', checkAndSendMessages);
+// Set up regular midnight check (server timezone)
+const job = new cron.CronJob('0 0 * * *', checkAndSendMessages, null, true, 'UTC');
+console.log('[Scheduler] Scheduled for daily midnight (UTC) checks');
 
-console.log('[Scheduler] Starting scheduler for daily midnight checks...');
-job.start();
+// Also check every 6 hours as a backup
+const backupJob = new cron.CronJob('0 */6 * * *', checkAndSendMessages, null, true, 'UTC');
+console.log('[Scheduler] Backup scheduler running every 6 hours');
+
+module.exports = { checkAndSendMessages, processMessage };

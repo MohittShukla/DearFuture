@@ -1,49 +1,91 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config(); // Load environment variables
+require('dotenv').config();
 
-// Create reusable transporter with Gmail SMTP settings
+// Verify transporter configuration
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com', // Use Gmail's SMTP host
-  port: 587, // Gmail SMTP port (TLS)
-  secure: false, // Use TLS (not SSL)
+  host: process.env.SMTP_HOST,
+  port: parseInt(process.env.SMTP_PORT),
+  secure: false,
   auth: {
-    user: process.env.SMTP_USER,  
-    pass: process.env.SMTP_PASSWORD,  
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD,
   },
+  // Add connection verification
+  pool: true,
+  maxConnections: 1,
+  rateDelta: 1000,
+  rateLimit: 5,
 });
+
+// Verify connection configuration
+transporter.verify()
+  .then(() => console.log('SMTP Connection verified successfully'))
+  .catch(err => console.error('SMTP Connection verification failed:', err));
 
 const sendMail = async (to, subject, text, html) => {
   try {
-    console.log('Email configuration:', {
-      host: 'smtp.gmail.com', // Gmail SMTP host
-      port: 587, // Gmail SMTP port (TLS)
+    console.log('Sending email with configuration:', {
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
       user: process.env.SMTP_USER,
-      sender: process.env.VERIFIED_SENDER,
+      from: process.env.VERIFIED_SENDER,
+      to,
+      subject
     });
 
-    console.log('Attempting to send email:', { to, subject });
+    if (!to || !subject) {
+      throw new Error('Missing required email parameters');
+    }
 
-    // Setting up mail options
     const mailOptions = {
-      from: `"DearFuture" <${process.env.VERIFIED_SENDER}>`, // Use your verified sender's email here
+      from: `"DearFuture" <${process.env.VERIFIED_SENDER}>`,
       to,
       subject,
       text: text || 'Please enable HTML to view this email',
       html: html || '',
+      headers: {
+        'X-Priority': '1',
+        'X-MSMail-Priority': 'High',
+        'Importance': 'high'
+      }
     };
 
-    console.log('Mail options:', mailOptions);
+    console.log('Attempting to send email with options:', {
+      to: mailOptions.to,
+      subject: mailOptions.subject,
+      from: mailOptions.from
+    });
 
-    // Sending the email
     const result = await transporter.sendMail(mailOptions);
-    console.log('Email sent successfully:', result);
-    return { data: result, error: null };
+    
+    console.log('Email sent successfully:', {
+      messageId: result.messageId,
+      response: result.response,
+      accepted: result.accepted,
+      rejected: result.rejected
+    });
+
+    return { success: true, data: result, error: null };
+
   } catch (error) {
-    console.error('Detailed error sending email:', error);
-    if (error.response) {
-      console.error('SMTP Response:', error.response);
-    }
-    return { data: null, error };
+    console.error('Detailed email sending error:', {
+      error: error.message,
+      code: error.code,
+      command: error.command,
+      response: error.response,
+      responseCode: error.responseCode,
+      stack: error.stack
+    });
+
+    return { 
+      success: false,
+      data: null, 
+      error: {
+        message: error.message,
+        code: error.code,
+        response: error.response
+      }
+    };
   }
 };
 
