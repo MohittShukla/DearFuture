@@ -45,9 +45,9 @@ function Success() {
         </div>
         
         {/* Return home button */}
-        <button 
+        <button
           className="return-button"
-          onClick={() => window.location.href = '/'}
+          onClick={() => window.location.href = '/compose'}
         >
           Create Another Message
         </button>

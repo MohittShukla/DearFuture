@@ -13,7 +13,7 @@ function Header() {
 
   return (
     <header className="header">
-      <Link to="/" className="header-brand">
+      <Link to={isAuthenticated ? "/compose" : "/"} className="header-brand">
         <img src="/eye.png" alt="Eye icon" style={{ width: '40px', height: '40px', marginRight:'5px' }} />
         <h1 className="header-title">
           Dear Future
@@ -23,6 +23,9 @@ function Header() {
       <nav className="header-nav">
         {isAuthenticated ? (
           <>
+            <Link to="/compose" className="header-link">
+              Compose
+            </Link>
             <Link to="/dashboard" className="header-link">
               My Messages
             </Link>
