@@ -1,16 +1,14 @@
 services:
   - type: web
     name: dearfuture
-    env: node
     region: oregon
     buildCommand: >
-      export NODE_VERSION=18 &&
-      cd client && 
-      rm -rf node_modules package-lock.json && 
-      npm install --force && 
+      cd client &&
+      rm -rf node_modules package-lock.json &&
+      npm install --force &&
       ROLLUP_NATIVE=0 npm run build &&
-      cd ../server && 
-      rm -rf node_modules package-lock.json && 
+      cd ../server &&
+      rm -rf node_modules package-lock.json &&
       npm install
     startCommand: cd server && node server.js
     envVars:
@@ -30,3 +28,5 @@ services:
         value: 3000
       - key: NODE_VERSION
         value: 18
+      - key: ROLLUP_NATIVE
+        value: 0
