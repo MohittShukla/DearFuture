@@ -1,35 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-
-// ========================================
-// Header Component
-// ========================================
-function Header() {
-  return (
-    <motion.header
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.5, delay: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 px-6 py-6 md:px-12"
-    >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link to="/" className="font-serif text-2xl md:text-3xl text-ink font-normal tracking-wide">
-          Dear Future
-        </Link>
-        <nav className="flex items-center gap-8 font-sans text-ink-secondary">
-          <Link to="/login" className="text-sm md:text-base hover:text-ink transition-colors duration-300">
-            Sign In
-          </Link>
-          <a href="#faq" className="text-sm md:text-base hover:text-ink transition-colors duration-300">
-            FAQ
-          </a>
-        </nav>
-      </div>
-    </motion.header>
-  );
-}
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 // ========================================
 // Hero Section ("The Threshold")
@@ -282,34 +256,6 @@ function FinalCTASection() {
         </Link>
       </div>
     </motion.section>
-  );
-}
-
-// ========================================
-// Footer Component
-// ========================================
-function Footer() {
-  return (
-    <footer className="py-12 px-6 border-t border-ink/5">
-      <div className="max-w-7xl mx-auto text-center">
-        <p className="font-sans text-sm text-ink-secondary mb-4">
-          Dear Future is a quiet place for reflection.
-        </p>
-        <div className="flex items-center justify-center gap-6 font-sans text-xs text-ink-secondary">
-          <a href="#faq" className="hover:text-ink transition-colors duration-300">
-            FAQ
-          </a>
-          <span>|</span>
-          <a href="#privacy" className="hover:text-ink transition-colors duration-300">
-            Privacy
-          </a>
-          <span>|</span>
-          <a href="#philosophy" className="hover:text-ink transition-colors duration-300">
-            Our Philosophy
-          </a>
-        </div>
-      </div>
-    </footer>
   );
 }
 
