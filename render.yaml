@@ -3,10 +3,11 @@ services:
     name: dearfuture
     region: oregon
     buildCommand: >
+      export ROLLUP_NATIVE=0 &&
       cd client &&
       rm -rf node_modules package-lock.json &&
       npm install --force &&
-      ROLLUP_NATIVE=0 npm run build &&
+      npm run build &&
       cd ../server &&
       rm -rf node_modules package-lock.json &&
       npm install
