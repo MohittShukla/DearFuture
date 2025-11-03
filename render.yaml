@@ -22,3 +22,5 @@ services:
         value: 3000
       - key: NODE_VERSION
         value: 20.11.1
+      - key: ROLLUP_NATIVE
+        value: false
