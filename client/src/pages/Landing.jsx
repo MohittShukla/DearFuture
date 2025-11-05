@@ -169,193 +169,292 @@ function IntroSection() {
 // Feature Section ("The Ritual")
 // ========================================
 
-// Feature card component
-function FeatureCard({ number, title, description, visual, delay }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative"
-    >
-      <div className="bg-gradient-to-br from-paper to-mist border border-hope/20 rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-500 hover:border-hope/40 h-full flex flex-col">
-        {/* Visual/Image */}
-        <div className="mb-8 flex items-center justify-center h-48 relative overflow-hidden rounded-xl bg-gradient-to-br from-mist/50 to-paper">
-          {visual}
-        </div>
-
-        {/* Number Badge */}
-        <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-hope/10 flex items-center justify-center border border-hope/20">
-          <span className="font-serif text-2xl text-hope font-light">{number}</span>
-        </div>
-
-        {/* Content */}
-        <div className="flex-1">
-          <h3 className="font-serif text-2xl md:text-3xl text-ink mb-4 font-normal group-hover:text-hope transition-colors duration-300">
-            {title}
-          </h3>
-          <p className="font-sans text-base md:text-lg text-ink-secondary leading-relaxed">
-            {description}
-          </p>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 function FeatureSection() {
-  const features = [
-    {
-      number: '1',
-      title: 'Write Your Truth',
-      description: 'Pour your heart onto the page. Share what matters to you today, your dreams, hopes, and the wisdom you want to remember.',
-      visual: (
-        <motion.div
-          initial={{ scale: 0.9 }}
-          whileInView={{ scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="w-full h-full flex items-center justify-center p-6"
-        >
-          <div className="space-y-3 w-full">
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: '75%' }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="h-2.5 bg-hope/30 rounded-full"
-            />
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: '100%' }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="h-2.5 bg-hope/30 rounded-full"
-            />
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: '90%' }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="h-2.5 bg-hope/30 rounded-full"
-            />
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: '85%' }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-              className="h-2.5 bg-hope/30 rounded-full"
-            />
-            <div className="pt-4">
-              <motion.div
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.8 }}
-                className="text-6xl"
-              >
-                ✍️
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
-      ),
-    },
-    {
-      number: '2',
-      title: 'Seal it in Time',
-      description: 'Choose the perfect moment in the future—a year, five years, or even a decade. Your letter will wait, locked away until that special day arrives.',
-      visual: (
-        <motion.div
-          initial={{ rotate: -5, scale: 0.9 }}
-          whileInView={{ rotate: 0, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2, type: 'spring' }}
-          className="w-full h-full flex items-center justify-center"
-        >
-          <div className="text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="font-serif text-7xl md:text-8xl text-hope mb-3"
-            >
-              2030
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="font-sans text-xl text-ink-secondary"
-            >
-              October 15
-            </motion.div>
-            <motion.div
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.8 }}
-              className="text-4xl mt-4"
-            >
-              🔒
-            </motion.div>
-          </div>
-        </motion.div>
-      ),
-    },
-    {
-      number: '3',
-      title: 'Rediscover Yourself',
-      description: "When the time comes, receive your letter. Open it and reflect on your journey, seeing how far you've come and who you've become.",
-      visual: (
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="w-full h-full flex items-center justify-center relative"
-        >
-          <motion.div
-            animate={{
-              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-            }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-            className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-transparent via-hope to-transparent bg-[length:200%_100%] rounded-full"
-          />
-          <motion.div
-            initial={{ scale: 0.8 }}
-            whileInView={{ scale: 1 }}
-            animate={{
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'easeInOut'
-            }}
-            className="text-9xl"
-          >
-            ✉️
-          </motion.div>
-        </motion.div>
-      ),
-    },
-  ];
-
   return (
-    <section className="py-24 md:py-32 px-6 bg-gradient-to-b from-transparent via-mist/30 to-transparent">
-      <div className="max-w-7xl mx-auto">
-        <motion.h2
+    <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
+      {/* Subtle background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-mist/20 to-transparent pointer-events-none" />
+
+      <div className="relative max-w-6xl mx-auto px-6 md:px-8">
+        {/* Section Header */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="font-serif text-3xl md:text-5xl text-ink mb-16 text-center font-light"
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-20 md:mb-32"
         >
-          The Ritual
-        </motion.h2>
+          <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-ink font-light mb-6">
+            How it works
+          </h2>
+          <p className="font-sans text-lg md:text-xl text-ink-secondary max-w-2xl mx-auto">
+            Three simple steps to send a message to your future self
+          </p>
+        </motion.div>
 
-        {/* Three static cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-          {features.map((feature, index) => (
-            <FeatureCard
-              key={feature.number}
-              {...feature}
-              delay={index * 0.2}
-            />
-          ))}
+        {/* Step 1 - Write */}
+        <div className="mb-32 md:mb-48">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Text Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="order-2 lg:order-1"
+            >
+              <div className="flex items-baseline gap-4 mb-6">
+                <span className="font-serif text-7xl md:text-8xl lg:text-9xl text-hope/20 font-light leading-none">
+                  01
+                </span>
+                <div className="h-px flex-1 bg-gradient-to-r from-hope/30 to-transparent" />
+              </div>
+              <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-ink font-light mb-6 leading-tight">
+                Write from the heart
+              </h3>
+              <p className="font-sans text-base md:text-lg lg:text-xl text-ink-secondary leading-relaxed mb-8">
+                Pour your thoughts, dreams, and reflections onto the page. What do you want to remember? What wisdom do you want to carry forward? Write it all down.
+              </p>
+              <div className="flex gap-3">
+                <div className="w-12 h-1 bg-hope/40 rounded-full" />
+                <div className="w-8 h-1 bg-hope/20 rounded-full" />
+                <div className="w-4 h-1 bg-hope/10 rounded-full" />
+              </div>
+            </motion.div>
+
+            {/* Visual */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+              className="order-1 lg:order-2"
+            >
+              <div className="relative aspect-square max-w-md mx-auto">
+                {/* Background glow */}
+                <motion.div
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    opacity: [0.3, 0.5, 0.3]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute inset-0 bg-hope/10 rounded-full blur-3xl"
+                />
+
+                {/* Content */}
+                <div className="relative bg-gradient-to-br from-paper to-mist border border-hope/20 rounded-3xl p-8 md:p-12 shadow-lg">
+                  <div className="space-y-4">
+                    {[85, 100, 75, 90, 80].map((width, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ width: 0, opacity: 0 }}
+                        whileInView={{ width: `${width}%`, opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          duration: 0.8,
+                          delay: 0.6 + i * 0.1,
+                          ease: [0.22, 1, 0.36, 1]
+                        }}
+                        className="h-2.5 bg-gradient-to-r from-hope/30 to-hope/10 rounded-full"
+                      />
+                    ))}
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 1.2 }}
+                      className="pt-6 text-center"
+                    >
+                      <span className="text-6xl">✍️</span>
+                    </motion.div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Step 2 - Schedule */}
+        <div className="mb-32 md:mb-48">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Visual */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="order-1"
+            >
+              <div className="relative aspect-square max-w-md mx-auto">
+                {/* Background glow */}
+                <motion.div
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.2, 0.4, 0.2]
+                  }}
+                  transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute inset-0 bg-hope/10 rounded-full blur-3xl"
+                />
+
+                {/* Content */}
+                <div className="relative bg-gradient-to-br from-mist to-paper border border-hope/20 rounded-3xl p-8 md:p-12 shadow-lg flex items-center justify-center">
+                  <div className="text-center">
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8, delay: 0.3 }}
+                      className="mb-6"
+                    >
+                      <div className="font-serif text-8xl md:text-9xl text-hope mb-4">
+                        2030
+                      </div>
+                      <div className="font-sans text-xl text-ink-secondary">
+                        October 15
+                      </div>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.6 }}
+                      className="text-5xl"
+                    >
+                      🔒
+                    </motion.div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Text Content */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+              className="order-2"
+            >
+              <div className="flex items-baseline gap-4 mb-6">
+                <span className="font-serif text-7xl md:text-8xl lg:text-9xl text-hope/20 font-light leading-none">
+                  02
+                </span>
+                <div className="h-px flex-1 bg-gradient-to-r from-hope/30 to-transparent" />
+              </div>
+              <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-ink font-light mb-6 leading-tight">
+                Choose when to receive it
+              </h3>
+              <p className="font-sans text-base md:text-lg lg:text-xl text-ink-secondary leading-relaxed mb-8">
+                Pick a date in the future—a year from now, five years, or even a decade. Your letter will be safely stored and delivered exactly when you need it most.
+              </p>
+              <div className="flex gap-3">
+                <div className="w-12 h-1 bg-hope/40 rounded-full" />
+                <div className="w-8 h-1 bg-hope/20 rounded-full" />
+                <div className="w-4 h-1 bg-hope/10 rounded-full" />
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Step 3 - Receive */}
+        <div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Text Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="order-2 lg:order-1"
+            >
+              <div className="flex items-baseline gap-4 mb-6">
+                <span className="font-serif text-7xl md:text-8xl lg:text-9xl text-hope/20 font-light leading-none">
+                  03
+                </span>
+                <div className="h-px flex-1 bg-gradient-to-r from-hope/30 to-transparent" />
+              </div>
+              <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-ink font-light mb-6 leading-tight">
+                Rediscover who you were
+              </h3>
+              <p className="font-sans text-base md:text-lg lg:text-xl text-ink-secondary leading-relaxed mb-8">
+                When the time arrives, you'll receive your letter. Open it and reconnect with your past self. See how far you've come, what's changed, and what remains true.
+              </p>
+              <div className="flex gap-3">
+                <div className="w-12 h-1 bg-hope/40 rounded-full" />
+                <div className="w-8 h-1 bg-hope/20 rounded-full" />
+                <div className="w-4 h-1 bg-hope/10 rounded-full" />
+              </div>
+            </motion.div>
+
+            {/* Visual */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+              className="order-1 lg:order-2"
+            >
+              <div className="relative aspect-square max-w-md mx-auto">
+                {/* Background glow */}
+                <motion.div
+                  animate={{
+                    scale: [1, 1.15, 1],
+                    opacity: [0.3, 0.5, 0.3]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute inset-0 bg-hope/10 rounded-full blur-3xl"
+                />
+
+                {/* Content */}
+                <div className="relative bg-gradient-to-br from-paper to-mist border border-hope/20 rounded-3xl p-8 md:p-12 shadow-lg flex items-center justify-center">
+                  <div className="relative">
+                    {/* Floating particles */}
+                    {[...Array(5)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute text-2xl"
+                        style={{
+                          top: `${Math.random() * 100}%`,
+                          left: `${Math.random() * 100}%`,
+                        }}
+                        animate={{
+                          y: [-20, -40, -20],
+                          opacity: [0, 1, 0],
+                          scale: [0.5, 1, 0.5]
+                        }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          delay: i * 0.6,
+                          ease: 'easeInOut'
+                        }}
+                      >
+                        ✨
+                      </motion.div>
+                    ))}
+
+                    {/* Envelope */}
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      viewport={{ once: true }}
+                      animate={{
+                        y: [0, -10, 0],
+                      }}
+                      transition={{
+                        scale: { duration: 0.8, delay: 0.3 },
+                        opacity: { duration: 0.8, delay: 0.3 },
+                        y: { duration: 3, repeat: Infinity, ease: 'easeInOut' }
+                      }}
+                      className="text-9xl"
+                    >
+                      ✉️
+                    </motion.div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>
