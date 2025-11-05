@@ -171,101 +171,105 @@ function IntroSection() {
 
 function FeatureSection() {
   return (
-    <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
-      {/* Subtle background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-mist/20 to-transparent pointer-events-none" />
-
-      <div className="relative max-w-6xl mx-auto px-6 md:px-8">
+    <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden bg-gradient-to-b from-paper via-mist/10 to-paper">
+      <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-20 md:mb-32"
+          className="text-center mb-24 md:mb-32 lg:mb-40"
         >
           <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-ink font-light mb-6">
             How it works
           </h2>
-          <p className="font-sans text-lg md:text-xl text-ink-secondary max-w-2xl mx-auto">
-            Three simple steps to send a message to your future self
+          <p className="font-sans text-lg md:text-xl text-ink-secondary max-w-2xl mx-auto leading-relaxed">
+            A simple ritual to connect your present with your future
           </p>
         </motion.div>
 
         {/* Step 1 - Write */}
-        <div className="mb-32 md:mb-48">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="mb-40 md:mb-56 lg:mb-64">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Text Content */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="order-2 lg:order-1"
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              className="lg:col-span-5 order-2 lg:order-1"
             >
-              <div className="flex items-baseline gap-4 mb-6">
-                <span className="font-serif text-7xl md:text-8xl lg:text-9xl text-hope/20 font-light leading-none">
+              <div className="mb-8">
+                <div className="font-serif text-[120px] md:text-[160px] lg:text-[200px] text-hope/[0.15] font-light leading-none tracking-tight -ml-2">
                   01
-                </span>
-                <div className="h-px flex-1 bg-gradient-to-r from-hope/30 to-transparent" />
+                </div>
               </div>
-              <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-ink font-light mb-6 leading-tight">
-                Write from the heart
+              <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-ink font-light mb-6 leading-[1.1]">
+                Write from<br />the heart
               </h3>
-              <p className="font-sans text-base md:text-lg lg:text-xl text-ink-secondary leading-relaxed mb-8">
-                Pour your thoughts, dreams, and reflections onto the page. What do you want to remember? What wisdom do you want to carry forward? Write it all down.
+              <p className="font-sans text-lg md:text-xl text-ink-secondary leading-relaxed max-w-md">
+                Pour your thoughts, dreams, and reflections onto the page. Capture this moment in time with honesty and intention.
               </p>
-              <div className="flex gap-3">
-                <div className="w-12 h-1 bg-hope/40 rounded-full" />
-                <div className="w-8 h-1 bg-hope/20 rounded-full" />
-                <div className="w-4 h-1 bg-hope/10 rounded-full" />
-              </div>
             </motion.div>
 
             {/* Visual */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-              className="order-1 lg:order-2"
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+              className="lg:col-span-7 order-1 lg:order-2"
             >
-              <div className="relative aspect-square max-w-md mx-auto">
-                {/* Background glow */}
-                <motion.div
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    opacity: [0.3, 0.5, 0.3]
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute inset-0 bg-hope/10 rounded-full blur-3xl"
-                />
+              <div className="relative aspect-[4/3] w-full max-w-2xl mx-auto lg:ml-auto lg:mr-0">
+                <div className="absolute inset-0 bg-gradient-to-br from-paper to-mist rounded-2xl overflow-hidden border border-hope/10 shadow-2xl shadow-hope/5">
+                  {/* Paper texture */}
+                  <div className="absolute inset-0 opacity-[0.015]" style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`
+                  }} />
 
-                {/* Content */}
-                <div className="relative bg-gradient-to-br from-paper to-mist border border-hope/20 rounded-3xl p-8 md:p-12 shadow-lg">
-                  <div className="space-y-4">
-                    {[85, 100, 75, 90, 80].map((width, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ width: 0, opacity: 0 }}
-                        whileInView={{ width: `${width}%`, opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{
-                          duration: 0.8,
-                          delay: 0.6 + i * 0.1,
-                          ease: [0.22, 1, 0.36, 1]
-                        }}
-                        className="h-2.5 bg-gradient-to-r from-hope/30 to-hope/10 rounded-full"
-                      />
-                    ))}
+                  {/* Content */}
+                  <div className="relative h-full p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+                    {/* Writing lines */}
+                    <div className="space-y-6">
+                      {[
+                        { width: '75%', delay: 0.3 },
+                        { width: '100%', delay: 0.4 },
+                        { width: '85%', delay: 0.5 },
+                        { width: '95%', delay: 0.6 },
+                        { width: '70%', delay: 0.7 },
+                        { width: '90%', delay: 0.8 },
+                      ].map((line, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ width: 0, opacity: 0 }}
+                          whileInView={{ width: line.width, opacity: 1 }}
+                          viewport={{ once: true }}
+                          transition={{
+                            duration: 1.2,
+                            delay: line.delay,
+                            ease: [0.22, 1, 0.36, 1]
+                          }}
+                        >
+                          <div className="h-[3px] bg-gradient-to-r from-hope/30 via-hope/20 to-transparent rounded-full" />
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {/* Cursor indicator */}
                     <motion.div
-                      initial={{ scale: 0, opacity: 0 }}
-                      whileInView={{ scale: 1, opacity: 1 }}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: 1.2 }}
-                      className="pt-6 text-center"
+                      transition={{ delay: 1.4 }}
+                      className="mt-6 ml-auto mr-0"
+                      style={{ width: '90%' }}
                     >
-                      <span className="text-6xl">✍️</span>
+                      <motion.div
+                        animate={{ opacity: [1, 0, 1] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                        className="w-[2px] h-5 bg-hope/60 ml-auto"
+                      />
                     </motion.div>
                   </div>
                 </div>
@@ -275,53 +279,89 @@ function FeatureSection() {
         </div>
 
         {/* Step 2 - Schedule */}
-        <div className="mb-32 md:mb-48">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="mb-40 md:mb-56 lg:mb-64">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Visual */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="order-1"
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              className="lg:col-span-7 order-1"
             >
-              <div className="relative aspect-square max-w-md mx-auto">
-                {/* Background glow */}
-                <motion.div
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.2, 0.4, 0.2]
-                  }}
-                  transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute inset-0 bg-hope/10 rounded-full blur-3xl"
-                />
+              <div className="relative aspect-[4/3] w-full max-w-2xl mx-auto lg:mr-auto lg:ml-0">
+                <div className="absolute inset-0 bg-gradient-to-br from-mist to-paper rounded-2xl overflow-hidden border border-hope/10 shadow-2xl shadow-hope/5">
+                  <div className="relative h-full flex items-center justify-center p-8 md:p-12">
+                    {/* Circular timer visualization */}
+                    <div className="relative w-full max-w-sm aspect-square">
+                      {/* Outer circle */}
+                      <motion.svg
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                        viewBox="0 0 200 200"
+                        className="w-full h-full"
+                      >
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="90"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="0.5"
+                          className="text-hope/20"
+                        />
+                        <motion.circle
+                          cx="100"
+                          cy="100"
+                          r="90"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeDasharray="565.48"
+                          strokeDashoffset="565.48"
+                          className="text-hope/40"
+                          animate={{ strokeDashoffset: 0 }}
+                          transition={{ duration: 3, delay: 0.5, ease: 'easeInOut' }}
+                          style={{ transformOrigin: 'center', transform: 'rotate(-90deg)' }}
+                        />
+                      </motion.svg>
 
-                {/* Content */}
-                <div className="relative bg-gradient-to-br from-mist to-paper border border-hope/20 rounded-3xl p-8 md:p-12 shadow-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.8, delay: 0.3 }}
-                      className="mb-6"
-                    >
-                      <div className="font-serif text-8xl md:text-9xl text-hope mb-4">
-                        2030
+                      {/* Center content */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.8, delay: 0.6 }}
+                          className="text-center"
+                        >
+                          <div className="font-serif text-6xl md:text-7xl lg:text-8xl text-hope mb-2 font-light">
+                            2030
+                          </div>
+                          <div className="font-sans text-sm md:text-base text-ink-secondary uppercase tracking-widest">
+                            October
+                          </div>
+                        </motion.div>
                       </div>
-                      <div className="font-sans text-xl text-ink-secondary">
-                        October 15
-                      </div>
-                    </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: 0.6 }}
-                      className="text-5xl"
-                    >
-                      🔒
-                    </motion.div>
+
+                      {/* Tick marks */}
+                      {[...Array(12)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0 }}
+                          whileInView={{ opacity: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.8 + i * 0.05 }}
+                          className="absolute w-0.5 h-3 bg-hope/30 top-0 left-1/2 -translate-x-1/2"
+                          style={{
+                            transformOrigin: 'bottom center',
+                            transform: `rotate(${i * 30}deg) translateY(-90px)`,
+                          }}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -329,126 +369,114 @@ function FeatureSection() {
 
             {/* Text Content */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-              className="order-2"
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+              className="lg:col-span-5 order-2"
             >
-              <div className="flex items-baseline gap-4 mb-6">
-                <span className="font-serif text-7xl md:text-8xl lg:text-9xl text-hope/20 font-light leading-none">
+              <div className="mb-8">
+                <div className="font-serif text-[120px] md:text-[160px] lg:text-[200px] text-hope/[0.15] font-light leading-none tracking-tight -ml-2">
                   02
-                </span>
-                <div className="h-px flex-1 bg-gradient-to-r from-hope/30 to-transparent" />
+                </div>
               </div>
-              <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-ink font-light mb-6 leading-tight">
-                Choose when to receive it
+              <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-ink font-light mb-6 leading-[1.1]">
+                Choose when<br />to receive it
               </h3>
-              <p className="font-sans text-base md:text-lg lg:text-xl text-ink-secondary leading-relaxed mb-8">
-                Pick a date in the future—a year from now, five years, or even a decade. Your letter will be safely stored and delivered exactly when you need it most.
+              <p className="font-sans text-lg md:text-xl text-ink-secondary leading-relaxed max-w-md">
+                Pick a moment in the future. Your letter will be locked away, waiting to find you when the time is right.
               </p>
-              <div className="flex gap-3">
-                <div className="w-12 h-1 bg-hope/40 rounded-full" />
-                <div className="w-8 h-1 bg-hope/20 rounded-full" />
-                <div className="w-4 h-1 bg-hope/10 rounded-full" />
-              </div>
             </motion.div>
           </div>
         </div>
 
         {/* Step 3 - Receive */}
         <div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Text Content */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="order-2 lg:order-1"
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              className="lg:col-span-5 order-2 lg:order-1"
             >
-              <div className="flex items-baseline gap-4 mb-6">
-                <span className="font-serif text-7xl md:text-8xl lg:text-9xl text-hope/20 font-light leading-none">
+              <div className="mb-8">
+                <div className="font-serif text-[120px] md:text-[160px] lg:text-[200px] text-hope/[0.15] font-light leading-none tracking-tight -ml-2">
                   03
-                </span>
-                <div className="h-px flex-1 bg-gradient-to-r from-hope/30 to-transparent" />
+                </div>
               </div>
-              <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-ink font-light mb-6 leading-tight">
-                Rediscover who you were
+              <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-ink font-light mb-6 leading-[1.1]">
+                Rediscover<br />who you were
               </h3>
-              <p className="font-sans text-base md:text-lg lg:text-xl text-ink-secondary leading-relaxed mb-8">
-                When the time arrives, you'll receive your letter. Open it and reconnect with your past self. See how far you've come, what's changed, and what remains true.
+              <p className="font-sans text-lg md:text-xl text-ink-secondary leading-relaxed max-w-md">
+                When the day arrives, open your letter and reconnect with your past self. Reflect on the journey between then and now.
               </p>
-              <div className="flex gap-3">
-                <div className="w-12 h-1 bg-hope/40 rounded-full" />
-                <div className="w-8 h-1 bg-hope/20 rounded-full" />
-                <div className="w-4 h-1 bg-hope/10 rounded-full" />
-              </div>
             </motion.div>
 
             {/* Visual */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-              className="order-1 lg:order-2"
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+              className="lg:col-span-7 order-1 lg:order-2"
             >
-              <div className="relative aspect-square max-w-md mx-auto">
-                {/* Background glow */}
-                <motion.div
-                  animate={{
-                    scale: [1, 1.15, 1],
-                    opacity: [0.3, 0.5, 0.3]
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute inset-0 bg-hope/10 rounded-full blur-3xl"
-                />
-
-                {/* Content */}
-                <div className="relative bg-gradient-to-br from-paper to-mist border border-hope/20 rounded-3xl p-8 md:p-12 shadow-lg flex items-center justify-center">
-                  <div className="relative">
-                    {/* Floating particles */}
-                    {[...Array(5)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        className="absolute text-2xl"
-                        style={{
-                          top: `${Math.random() * 100}%`,
-                          left: `${Math.random() * 100}%`,
-                        }}
-                        animate={{
-                          y: [-20, -40, -20],
-                          opacity: [0, 1, 0],
-                          scale: [0.5, 1, 0.5]
-                        }}
-                        transition={{
-                          duration: 3,
-                          repeat: Infinity,
-                          delay: i * 0.6,
-                          ease: 'easeInOut'
-                        }}
-                      >
-                        ✨
-                      </motion.div>
-                    ))}
-
-                    {/* Envelope */}
+              <div className="relative aspect-[4/3] w-full max-w-2xl mx-auto lg:ml-auto lg:mr-0">
+                <div className="absolute inset-0 bg-gradient-to-br from-paper to-mist rounded-2xl overflow-hidden border border-hope/10 shadow-2xl shadow-hope/5">
+                  <div className="relative h-full flex items-center justify-center p-8 md:p-12">
+                    {/* Abstract envelope shape */}
                     <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      whileInView={{ scale: 1, opacity: 1 }}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
-                      animate={{
-                        y: [0, -10, 0],
-                      }}
-                      transition={{
-                        scale: { duration: 0.8, delay: 0.3 },
-                        opacity: { duration: 0.8, delay: 0.3 },
-                        y: { duration: 3, repeat: Infinity, ease: 'easeInOut' }
-                      }}
-                      className="text-9xl"
+                      transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+                      className="relative w-full max-w-sm"
                     >
-                      ✉️
+                      {/* Envelope body */}
+                      <div className="relative aspect-[3/2]">
+                        {/* Bottom rectangle */}
+                        <motion.div
+                          initial={{ scaleY: 0 }}
+                          whileInView={{ scaleY: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                          className="absolute inset-0 bg-gradient-to-br from-hope/10 to-hope/5 border border-hope/20 rounded-lg"
+                          style={{ transformOrigin: 'bottom' }}
+                        />
+
+                        {/* Top flap */}
+                        <motion.div
+                          initial={{ rotateX: 0 }}
+                          whileInView={{ rotateX: -45 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, delay: 1, ease: [0.22, 1, 0.36, 1] }}
+                          className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-br from-hope/20 to-hope/10 border border-hope/20 rounded-t-lg"
+                          style={{ transformOrigin: 'bottom', transform: 'perspective(600px)' }}
+                        />
+
+                        {/* Letter peeking out */}
+                        <motion.div
+                          initial={{ y: 0, opacity: 0 }}
+                          whileInView={{ y: -40, opacity: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, delay: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                          className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[85%] h-[70%] bg-paper border border-hope/20 rounded-sm shadow-lg"
+                        >
+                          <div className="p-4 space-y-2">
+                            {[60, 80, 70, 50].map((width, i) => (
+                              <motion.div
+                                key={i}
+                                initial={{ width: 0 }}
+                                whileInView={{ width: `${width}%` }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: 1.8 + i * 0.1 }}
+                                className="h-[2px] bg-hope/20 rounded-full"
+                              />
+                            ))}
+                          </div>
+                        </motion.div>
+                      </div>
                     </motion.div>
                   </div>
                 </div>
