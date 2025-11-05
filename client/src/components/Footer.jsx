@@ -44,20 +44,6 @@ function Footer() {
             </svg>
           </a>
         </div>
-
-        <div className="flex items-center justify-center gap-6 font-sans text-xs text-ink-secondary">
-          <a href="#faq" className="hover:text-ink transition-colors duration-300">
-            FAQ
-          </a>
-          <span>|</span>
-          <a href="#privacy" className="hover:text-ink transition-colors duration-300">
-            Privacy
-          </a>
-          <span>|</span>
-          <a href="#philosophy" className="hover:text-ink transition-colors duration-300">
-            Our Philosophy
-          </a>
-        </div>
       </div>
     </footer>
   );
